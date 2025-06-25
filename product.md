@@ -21,10 +21,10 @@ qurayt is a web app that helps UI/UX designers, frontend developers, and indie h
 |--------------|--------------------------------------|--------------------------------------|
 | Frontend     | Next.js + Tailwind CSS               | Easy SSR, fast, familiar             |
 | API Backend  | Next.js API routes                   | Simpler deployment                   |
-| Search       | Weaviate (self-hosted vector DB)     | Semantic search engine               |
+| Search       | Supabase (pgvector)                  | Semantic search engine               |
 | AI           | OpenAI Embeddings (text-embedding-3-small) | Converts prompts into meaning |
 | Data Source  | Dribbble API (Behance later)         | Search design shots                  |
-| Storage      | Redis or Supabase (optional)         | Cache recent queries                 |
+| Storage      | Supabase Storage                     | Store UI screenshots                 |
 | Deployment   | Vercel                               | Easy, free                           |
 | Auth         | None for MVP                         | Skip for now                         |
 | State Mgmt   | Next.js hooks + SWR                  | Keep it minimal                      |
@@ -48,8 +48,7 @@ qurayt/
 │   │   └── ScreenshotCard.tsx
 │   ├── lib/
 │   │   ├── embeddings.ts     # OpenAI wrapper
-│   │   ├── weaviate.ts       # Weaviate client
-│   │   └── cache.ts          # Optional Redis/Supabase cache
+│   │   └── cache.ts          # Optional Supabase cache
 │   └── styles/
 │       └── globals.css
 ├── .env.local
@@ -64,13 +63,13 @@ qurayt/
 ### Phase 1: MVP (Dribbble Only)
 - Minimal UI: input, search button, result grid
 - Backend: Dribbble API integration, search API
-- AI: OpenAI embeddings, Weaviate vector search
+- AI: OpenAI embeddings, Supabase vector search
 - Result display: images, tags, links
 - Deploy to Vercel
 
 ### Phase 2: Caching + Behance
 - Add Behance API
-- Add Redis/Supabase caching
+- Add Supabase for caching
 - Merge/multi-source results, add filters
 
 ### Phase 3: Advanced Features
@@ -82,13 +81,12 @@ qurayt/
 ## API Keys & Accounts Needed
 - OpenAI
 - Dribbble
-- Weaviate
+- Supabase
 - Vercel
-- Redis/Supabase (optional)
 
 ## Timeline Estimate
 - Setup + Dribbble API: 1 day
-- OpenAI embeddings + Weaviate: 1–2 days
+- OpenAI embeddings + Supabase: 1–2 days
 - Build frontend search & display: 1–2 days
 - Deploy MVP: 1 day
 - **Total:** ~1 week 

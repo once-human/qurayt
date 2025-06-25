@@ -56,35 +56,6 @@ function Footer() {
   );
 }
 
-const DUMMY_RESULTS = [
-  // 36 unique dummy cards for 3 sets of 12 (3 sets = 36)
-  {
-    title: 'Minimal Product Card',
-    image: 'https://source.unsplash.com/random/400x300?ui,product,card',
-    url: 'https://dribbble.com/shots/1234567',
-    platform: 'Dribbble',
-    tags: ['Minimal', 'Product', 'Card'],
-  },
-  {
-    title: 'Dark Mode Dashboard',
-    image: 'https://source.unsplash.com/random/400x300?ui,dark,dashboard',
-    url: 'https://behance.net/gallery/7654321',
-    platform: 'Behance',
-    tags: ['Dark', 'Dashboard', 'Analytics'],
-  },
-  // ... (repeat and vary the above pattern to reach 36 unique cards)
-];
-while (DUMMY_RESULTS.length < 36) {
-  const i = DUMMY_RESULTS.length + 1;
-  DUMMY_RESULTS.push({
-    title: `Inspiration ${i}`,
-    image: `https://source.unsplash.com/random/400x300?sig=${i}&ui,design,${i}`,
-    url: i % 2 === 0 ? `https://dribbble.com/shots/${1000000 + i}` : `https://behance.net/gallery/${9000000 + i}`,
-    platform: i % 2 === 0 ? 'Dribbble' : 'Behance',
-    tags: ['UI', 'Inspiration', `Tag${i}`],
-  });
-}
-
 const PLATFORMS = ['All', 'Dribbble', 'Behance'];
 
 export default function LandingPage() {
@@ -93,68 +64,36 @@ export default function LandingPage() {
   const [results, setResults] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [platform, setPlatform] = useState('All');
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const [isDark, setIsDark] = useState(false);
 
   const filteredResults = results.filter(
-    r => platform === 'All' || r.platform === platform
+    r => platform === 'All' || r.platform?.toLowerCase() === platform.toLowerCase()
   );
-
-  const PAGE_SIZE = 12; // 4 rows of 4 columns
 
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
     setResults([]);
-    setPage(1);
-    setHasMore(true);
-    setTimeout(() => {
-      if (query.toLowerCase().includes('error')) {
-        setError('Something went wrong. Please try again.');
+    try {
+      const res = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: query }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setError(err.error || 'Something went wrong. Please try again.');
         setLoading(false);
         return;
       }
-      setResults(DUMMY_RESULTS.slice(0, PAGE_SIZE));
+      const data = await res.json();
+      setResults(data.results || []);
       setLoading(false);
-    }, 1200);
-  };
-
-  // Robust Intersection Observer infinite scroll
-  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
-    if (entries[0].isIntersecting && !loading && hasMore) {
-      setLoading(true);
-      setTimeout(() => {
-        const nextPage = page + 1;
-        const start = PAGE_SIZE * (nextPage - 1);
-        const end = PAGE_SIZE * nextPage;
-        const nextResults = DUMMY_RESULTS.slice(start, end);
-        if (nextResults.length > 0) {
-          setResults(prev => [...prev, ...nextResults]);
-          setPage(nextPage);
-        } else {
-          setHasMore(false);
-        }
-        setLoading(false);
-      }, 500);
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+      setLoading(false);
     }
-  }, [loading, hasMore, page]);
-
-  useEffect(() => {
-    if (!sentinelRef.current) return;
-    if (observerRef.current) observerRef.current.disconnect();
-    observerRef.current = new window.IntersectionObserver(handleObserver, {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0,
-    });
-    observerRef.current.observe(sentinelRef.current);
-    return () => {
-      if (observerRef.current) observerRef.current.disconnect();
-    };
-  }, [handleObserver]);
+  };
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
@@ -216,18 +155,6 @@ export default function LandingPage() {
               ))}
             </div>
             <ResultGrid results={filteredResults} loading={false} />
-            <div ref={sentinelRef} style={{ height: 1 }} />
-            {loading && (
-              <div className="flex justify-center py-6">
-                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            )}
-            {hasMore && !loading && results.length > 0 && (
-              <div className="text-center text-gray-400 py-6">Scroll down to load more...</div>
-            )}
-            {!hasMore && results.length > 0 && (
-              <div className="text-center text-gray-400 py-6">No more results.</div>
-            )}
           </div>
         )}
       </section>

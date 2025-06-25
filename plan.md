@@ -36,9 +36,9 @@ A web app for UI/UX designers and developers to search for real-life UI screensh
 #### 4. AI & Search
 - [ ] Set up OpenAI API (text-embedding-3-small)
 - [ ] Create embedding logic for Dribbble shot titles
-- [ ] Set up Weaviate (self-hosted or cloud) and connect from backend
-- [ ] Store embeddings in Weaviate
-- [ ] On user search: embed prompt, query Weaviate, return top 10 matches
+- [ ] Set up Supabase (pgvector) and connect from backend
+- [ ] Store embeddings in Supabase
+- [ ] On user search: embed prompt, query Supabase vector, return top 10 matches
 
 #### 5. Result Display
 - [ ] Show images, tags, and links in frontend grid
@@ -52,7 +52,7 @@ A web app for UI/UX designers and developers to search for real-life UI screensh
 ### PHASE 2: Caching & Multi-Source
 
 - [ ] Add Behance API integration
-- [ ] Add Redis or Supabase for caching previous results
+- [ ] Add Supabase for caching previous results
 - [ ] Merge and deduplicate results from Dribbble + Behance
 - [ ] Add source/platform filter in UI
 
@@ -87,8 +87,7 @@ qurayt/
 │   │   └── ScreenshotCard.tsx
 │   ├── lib/
 │   │   ├── embeddings.ts     # OpenAI wrapper
-│   │   ├── weaviate.ts       # Weaviate client
-│   │   └── cache.ts          # Optional Redis/Supabase cache
+│   │   └── cache.ts          # Optional Supabase cache
 ├── .env.local
 ├── next.config.js
 ├── package.json
@@ -100,9 +99,8 @@ qurayt/
 ## API Keys & Accounts Needed
 - [ ] OpenAI (embeddings)
 - [ ] Dribbble (API access)
-- [ ] Weaviate (cloud or self-hosted)
+- [ ] Supabase
 - [ ] Vercel (deployment)
-- [ ] Redis/Supabase (optional, for caching)
 
 ---
 
@@ -118,7 +116,7 @@ qurayt/
 | Task                              | Time      |
 |-----------------------------------|-----------|
 | Setup + Dribbble API              | 1 day     |
-| OpenAI embeddings + Weaviate      | 1–2 days  |
+| OpenAI embeddings + Supabase      | 1–2 days  |
 | Build frontend search & display   | 1–2 days  |
 | Deploy MVP to Vercel              | 1 day     |
 | **Total (MVP)**                   | ~1 week   |
@@ -129,7 +127,7 @@ qurayt/
 1. Set up Next.js project and Tailwind CSS (done)
 2. Move files to correct directory (done)
 3. Implement Dribbble API integration
-4. Set up OpenAI and Weaviate
+4. Set up OpenAI and Supabase
 5. Build frontend search and result grid
 6. Deploy MVP
 7. Iterate on feedback and add Phase 2 features 

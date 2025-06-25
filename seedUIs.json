@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Dark mode onboarding for fintech app",
+    "tags": ["dark mode", "onboarding", "fintech"],
+    "url": "https://dribbble.com/shots/12345678",
+    "image_url": "https://cdn.dribbble.com/users/123/screenshots/12345678/media/abc123.png",
+    "platform": "dribbble"
+  },
+  {
+    "title": "Minimal product card UI",
+    "tags": ["minimal", "product card", "ecommerce"],
+    "url": "https://dribbble.com/shots/23456789",
+    "image_url": "https://cdn.dribbble.com/users/234/screenshots/23456789/media/def456.png",
+    "platform": "dribbble"
+  },
+  {
+    "title": "Mobile banking dashboard",
+    "tags": ["mobile", "dashboard", "banking"],
+    "url": "https://dribbble.com/shots/34567890",
+    "image_url": "https://cdn.dribbble.com/users/345/screenshots/34567890/media/ghi789.png",
+    "platform": "dribbble"
+  },
+  {
+    "title": "Onboarding illustration for SaaS",
+    "tags": ["onboarding", "illustration", "saas"],
+    "url": "https://dribbble.com/shots/45678901",
+    "image_url": "https://cdn.dribbble.com/users/456/screenshots/45678901/media/jkl012.png",
+    "platform": "dribbble"
+  },
+  {
+    "title": "Behance portfolio grid UI",
+    "tags": ["portfolio", "grid", "behance"],
+    "url": "https://behance.net/gallery/56789012",
+    "image_url": "https://mir-s3-cdn-cf.behance.net/project_modules/1400/56789012.jpg",
+    "platform": "behance"
+  }
+] 
