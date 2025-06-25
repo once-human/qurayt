@@ -29,17 +29,19 @@ qurayt is a web app that helps UI/UX designers, frontend developers, and indie h
 | Auth         | None for MVP                         | Skip for now                         |
 | State Mgmt   | Next.js hooks + SWR                  | Keep it minimal                      |
 
-## Project Structure (Suggested)
+## Project Structure (Updated, Industry Standard)
 ```
 qurayt/
 ├── public/
 │   └── logo.svg
 ├── src/
-│   ├── pages/
-│   │   ├── index.tsx         # Search Page
+│   ├── app/
+│   │   ├── page.tsx         # Main Search Page
+│   │   ├── layout.tsx       # Root layout
+│   │   ├── globals.css      # Global styles
 │   │   └── api/
-│   │       ├── search.ts     # Handles user prompt
-│   │       └── fetch.ts      # Dribbble fetch logic
+│   │       ├── search/route.ts  # Handles user prompt
+│   │       └── fetch/route.ts   # Dribbble fetch logic
 │   ├── components/
 │   │   ├── SearchInput.tsx
 │   │   ├── ResultGrid.tsx
@@ -55,6 +57,8 @@ qurayt/
 ├── package.json
 └── README.md
 ```
+
+> As of 2024, the src/app directory is the recommended industry standard for Next.js projects, supporting advanced layouts, server components, and modern best practices.
 
 ## Implementation Phases
 ### Phase 1: MVP (Dribbble Only)

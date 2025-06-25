@@ -13,16 +13,19 @@ A web app for UI/UX designers and developers to search for real-life UI screensh
 - [x] Initialize Next.js project with TypeScript
 - [x] Move all files to correct directory (no nested qurayt/)
 - [x] Set up Tailwind CSS (manual config due to CLI issues)
-- [x] Configure project structure (see below, all folders/files scaffolded, including src/pages/api)
+- [x] Configure project structure (see above, all folders/files scaffolded, now using src/app)
 - [ ] Set up environment variables (.env.local)
+- [ ] Remove legacy src/pages structure (in progress)
 
-> **Note:** Tailwind CLI was not working via npx/npm, so config files were created manually. The project now uses the classic src/pages and src/pages/api structure as planned, not the app/ directory.
+> **Note:** Migrating to the modern Next.js app directory structure for industry best practices. Tailwind config remains compatible.
 
 #### 2. Frontend
-- [ ] Build minimal search UI (input + button)
-- [ ] Create grid layout for displaying results
-- [ ] Implement ScreenshotCard component (image, title, link)
-- [ ] Add loading and error states
+- [x] Build minimal search UI (input + button)
+- [x] Create grid layout for displaying results
+- [x] Implement ScreenshotCard component (image, title, link)
+- [x] Add loading and error states
+
+> **Note:** Minimal UI is implemented and ready for live preview. Next step: backend/API integration.
 
 #### 3. Backend/API
 - [ ] Create API route for `/api/search` (handles user prompt)
@@ -64,18 +67,20 @@ A web app for UI/UX designers and developers to search for real-life UI screensh
 
 ---
 
-## Project Structure (Suggested)
+## Project Structure (Updated, Industry Standard)
 
 ```
 qurayt/
 ├── public/
 │   └── logo.svg
 ├── src/
-│   ├── pages/
-│   │   ├── index.tsx         # Search Page
+│   ├── app/
+│   │   ├── page.tsx         # Main Search Page
+│   │   ├── layout.tsx       # Root layout
+│   │   ├── globals.css      # Global styles
 │   │   └── api/
-│   │       ├── search.ts     # Handles user prompt
-│   │       └── fetch.ts      # Dribbble fetch logic
+│   │       ├── search/route.ts  # Handles user prompt
+│   │       └── fetch/route.ts   # Dribbble fetch logic
 │   ├── components/
 │   │   ├── SearchInput.tsx
 │   │   ├── ResultGrid.tsx
@@ -84,8 +89,6 @@ qurayt/
 │   │   ├── embeddings.ts     # OpenAI wrapper
 │   │   ├── weaviate.ts       # Weaviate client
 │   │   └── cache.ts          # Optional Redis/Supabase cache
-│   └── styles/
-│       └── globals.css
 ├── .env.local
 ├── next.config.js
 ├── package.json
