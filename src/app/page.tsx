@@ -5,7 +5,8 @@ import ThemeSwitcher from '../components/ThemeSwitcher';
 import SearchInput from '../components/SearchInput';
 import ResultGrid from '../components/ResultGrid';
 
-function FloatingCards() {
+function FloatingCards({ isDark }: { isDark: boolean }) {
+  if (!isDark) return null; // Only show floating cards in dark mode for subtlety
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
       <div className="absolute top-10 left-1/4 w-48 h-32 bg-white/60 dark:bg-neutral-800/60 rounded-2xl shadow-xl blur-2xl rotate-6" />
@@ -16,14 +17,19 @@ function FloatingCards() {
   );
 }
 
+function QuraytLogo({ fontSize = 'text-2xl', fontWeight = 'font-extrabold', className = '' }) {
+  return (
+    <span className={`${fontSize} ${fontWeight} tracking-tight select-none bg-gradient-to-r from-gray-800 via-gray-500 to-gray-900 dark:from-gray-100 dark:via-gray-400 dark:to-gray-200 bg-clip-text text-transparent ${className}`} style={{ letterSpacing: '-0.04em', fontFamily: 'Inter, sans-serif' }}>
+      qurayt
+    </span>
+  );
+}
+
 function Navbar() {
   return (
-    <nav className="w-full flex items-center justify-between px-8 py-6 absolute top-0 left-0 z-20">
-      <div className="flex items-center gap-1">
-        <span className="text-2xl font-extrabold text-blue-600 tracking-tight">Q</span>
-        <span className="text-lg font-bold text-gray-900 dark:text-white tracking-tight -ml-1">urayt</span>
-      </div>
-      <div className="flex items-center gap-6 text-gray-700 dark:text-gray-200 font-medium text-base">
+    <nav className="w-full flex items-center justify-between px-8 py-6 fixed top-0 left-0 z-20 bg-white/90 dark:bg-transparent shadow-sm dark:shadow-none border-b border-gray-100 dark:border-none backdrop-blur-lg">
+      <QuraytLogo fontSize="text-2xl" fontWeight="font-extrabold" />
+      <div className="flex items-center gap-6 text-gray-900 dark:text-gray-200 font-medium text-base">
         <a href="#how" className="hover:text-blue-500 transition">How it works</a>
         <a href="#gallery" className="hover:text-blue-500 transition">Gallery</a>
         <a href="#usecases" className="hover:text-blue-500 transition">Use Cases</a>
@@ -36,13 +42,10 @@ function Navbar() {
 
 function Footer() {
   return (
-    <footer className="w-full py-8 px-4 flex items-center justify-between bg-gradient-to-t from-black/10 via-transparent to-transparent dark:from-white/5 border-t border-gray-200 dark:border-neutral-800 mt-24 relative">
-      <div className="flex items-center gap-1">
-        <span className="text-xl font-extrabold text-blue-600">Q</span>
-        <span className="font-bold text-gray-900 dark:text-white -ml-1">urayt</span>
-      </div>
+    <footer className="w-full py-8 px-4 flex items-center justify-between bg-white/90 dark:bg-gradient-to-t dark:from-white/5 dark:via-transparent dark:to-transparent border-t border-gray-100 dark:border-neutral-800 shadow-sm dark:shadow-none mt-24 relative">
+      <QuraytLogo fontSize="text-lg" fontWeight="font-bold" />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center w-full pointer-events-none">
-        <span className="text-xs text-gray-200 dark:text-gray-400 text-center pointer-events-auto">Designed with <span className="text-red-500">❤️</span> | Inspired by <a href="https://khushibanthia.framer.website" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition">Khushi Banthia</a>’s brilliant idea.</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400 text-center pointer-events-auto">Designed with <span className="text-red-500">❤️</span> | Inspired by <a href="https://khushibanthia.framer.website" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition">Khushi Banthia</a>’s brilliant idea.</span>
       </div>
       <div className="flex gap-6 text-gray-500 dark:text-gray-400 text-sm">
         <a href="#" className="hover:text-blue-500 transition">Privacy</a>
@@ -94,6 +97,7 @@ export default function LandingPage() {
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const [isDark, setIsDark] = useState(false);
 
   const filteredResults = results.filter(
     r => platform === 'All' || r.platform === platform
@@ -152,11 +156,20 @@ export default function LandingPage() {
     };
   }, [handleObserver]);
 
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains('dark'));
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-blue-950 overflow-x-hidden">
-      <FloatingCards />
+    <main className="relative min-h-screen flex flex-col items-center justify-center transition-colors duration-300 bg-gradient-to-br from-white via-blue-100 to-blue-400 dark:bg-gradient-to-br dark:from-neutral-900 dark:via-neutral-950 dark:to-blue-950 overflow-x-hidden">
+      <FloatingCards isDark={isDark} />
       <Navbar />
-      <section className="relative z-10 flex flex-col items-center justify-center py-40 px-4 w-full">
+      <section className="relative z-10 flex flex-col items-center justify-center py-40 px-4 w-full transition-colors duration-300">
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white text-center mb-6 tracking-tight drop-shadow-xl">
           UI Inspiration. <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">Qurayted.</span>
         </h1>
@@ -218,7 +231,17 @@ export default function LandingPage() {
           </div>
         )}
       </section>
-      <Footer />
+      <footer className={`w-full py-8 px-4 flex items-center justify-between ${isDark ? 'bg-gradient-to-t from-black/10 via-transparent to-transparent dark:from-white/5' : 'bg-gradient-to-t from-white/80 via-blue-50/70 to-blue-100/60'} border-t ${isDark ? 'border-gray-200 dark:border-neutral-800' : 'border-gray-100'} shadow-sm dark:shadow-none mt-24 relative`}>
+        <QuraytLogo fontSize="text-lg" fontWeight="font-bold" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center w-full pointer-events-none">
+          <span className={`text-xs ${isDark ? 'text-gray-200 dark:text-gray-400' : 'text-gray-500'} text-center pointer-events-auto`}>Designed with <span className="text-red-500">❤️</span> | Inspired by <a href="https://khushibanthia.framer.website" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition">Khushi Banthia</a>’s brilliant idea.</span>
+        </div>
+        <div className={`flex gap-6 ${isDark ? 'text-gray-500 dark:text-gray-400' : 'text-gray-500'} text-sm`}>
+          <a href="#" className="hover:text-blue-500 transition">Privacy</a>
+          <a href="#" className="hover:text-blue-500 transition">Terms</a>
+          <a href="https://github.com/once-human/qurayt" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition">GitHub</a>
+        </div>
+      </footer>
     </main>
   );
 }

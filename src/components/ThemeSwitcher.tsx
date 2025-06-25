@@ -6,7 +6,7 @@ function getInitialTheme() {
   if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem('theme');
   if (stored === 'dark' || stored === 'light') return stored;
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+  // Force default to light for debug
   return 'light';
 }
 
@@ -17,11 +17,19 @@ export default function ThemeSwitcher({ className = '' }: { className?: string }
   useLayoutEffect(() => {
     const initial = getInitialTheme();
     setTheme(initial);
-    document.documentElement.classList.toggle('dark', initial === 'dark');
+    if (initial === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
     localStorage.setItem('theme', theme);
   }, [theme]);
 
