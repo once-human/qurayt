@@ -25,4 +25,4 @@ const ScreenshotCard: React.FC<ScreenshotCardProps> = ({ title, image, url }) =>
   </div>
 );
 
-export default ScreenshotCard;
+export default ScreenshotCard; 

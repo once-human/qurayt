@@ -22,4 +22,4 @@ const ResultGrid: React.FC<ResultGridProps> = ({ results, loading }) => {
   );
 };
 
-export default ResultGrid;
+export default ResultGrid; 
