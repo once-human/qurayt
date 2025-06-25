@@ -34,16 +34,18 @@ function Navbar() {
 
 function Footer() {
   return (
-    <footer className="w-full py-8 px-4 flex flex-col md:flex-row items-center justify-between bg-gradient-to-t from-black/10 via-transparent to-transparent dark:from-white/5 border-t border-gray-200 dark:border-neutral-800 mt-24">
-      <div className="flex items-center gap-1 mb-4 md:mb-0">
+    <footer className="w-full py-8 px-4 flex items-center justify-between bg-gradient-to-t from-black/10 via-transparent to-transparent dark:from-white/5 border-t border-gray-200 dark:border-neutral-800 mt-24 relative">
+      <div className="flex items-center gap-1">
         <span className="text-xl font-extrabold text-blue-600">Q</span>
         <span className="font-bold text-gray-900 dark:text-white -ml-1">urayt</span>
+      </div>
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center w-full pointer-events-none">
+        <span className="text-xs text-gray-200 dark:text-gray-400 text-center pointer-events-auto">Designed with <span className="text-red-500">❤️</span> | Inspired by <a href="https://khushibanthia.framer.website" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition">Khushi Banthia</a>’s brilliant idea.</span>
       </div>
       <div className="flex gap-6 text-gray-500 dark:text-gray-400 text-sm">
         <a href="#" className="hover:text-blue-500 transition">Privacy</a>
         <a href="#" className="hover:text-blue-500 transition">Terms</a>
         <a href="https://github.com/once-human/qurayt" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition">GitHub</a>
-        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition">Twitter</a>
       </div>
     </footer>
   );
