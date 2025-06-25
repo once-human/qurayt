@@ -6,6 +6,21 @@ import fetch from 'node-fetch';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const OPENAI_EMBEDDING_MODEL = 'text-embedding-3-small';
 
+// Type for OpenAI embeddings API response
+interface OpenAIEmbeddingsResponse {
+  data: Array<{
+    embedding: number[];
+    index: number;
+    object: string;
+  }>;
+  model: string;
+  object: string;
+  usage: {
+    prompt_tokens: number;
+    total_tokens: number;
+  };
+}
+
 export async function getEmbedding(text: string): Promise<number[]> {
   const response = await fetch('https://api.openai.com/v1/embeddings', {
     method: 'POST',
@@ -21,6 +36,6 @@ export async function getEmbedding(text: string): Promise<number[]> {
   if (!response.ok) {
     throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
   }
-  const data = await response.json();
+  const data = (await response.json()) as OpenAIEmbeddingsResponse;
   return data.data[0].embedding;
 } 
