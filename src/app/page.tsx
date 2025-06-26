@@ -1,9 +1,110 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import ThemeSwitcher from '../components/ThemeSwitcher';
-import SearchInput from '../components/SearchInput';
-import ResultGrid from '../components/ResultGrid';
+
+// Simple theme switcher component
+function ThemeSwitcher({ className = '' }: { className?: string }) {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className={`p-2 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition ${className}`}
+      aria-label="Toggle theme"
+    >
+      {isDark ? (
+        <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+// Simple search input component
+function SearchInput({ 
+  value, 
+  onChange, 
+  onSearch, 
+  loading = false, 
+  autoFocus = false 
+}: { 
+  value: string; 
+  onChange: (value: string) => void; 
+  onSearch: () => void; 
+  loading?: boolean; 
+  autoFocus?: boolean; 
+}) {
+  return (
+    <div className="relative flex-1">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && onSearch()}
+        placeholder="Describe the UI you're looking for..."
+        className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        disabled={loading}
+        autoFocus={autoFocus}
+      />
+    </div>
+  );
+}
+
+// Simple result grid component
+function ResultGrid({ results, loading }: { results: any[]; loading: boolean }) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden animate-pulse">
+            <div className="h-48 bg-gray-200 dark:bg-neutral-700" />
+            <div className="p-4">
+              <div className="h-4 bg-gray-200 dark:bg-neutral-700 rounded mb-2" />
+              <div className="h-3 bg-gray-200 dark:bg-neutral-700 rounded w-2/3" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {results.map((result, i) => (
+        <div key={i} className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+          <div className="h-48 bg-gray-200 dark:bg-neutral-700 flex items-center justify-center">
+            <span className="text-gray-500 dark:text-gray-400">Screenshot Placeholder</span>
+          </div>
+          <div className="p-4">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{result.title || 'Untitled'}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{result.platform || 'Unknown Platform'}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function FloatingCards({ isDark }: { isDark: boolean }) {
   if (!isDark) return null; // Only show floating cards in dark mode for subtlety
